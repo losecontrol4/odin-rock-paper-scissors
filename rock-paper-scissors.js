@@ -1,18 +1,84 @@
+let playerScore = 0
+let computerScore = 0
+//const winningScore = 5 //Orginally I was going to have a score to play to to win, but I actually found it more fun for it to go on forever
+startGame()
+
+
+function incrementPlayerScore() {
+    playerScore += 1
+}
+
+function incrementComputerScore() {
+    computerScore += 1
+}
+
+function startGame() {//simply creates the UI, and plays the game using the logic from other functions
+    playerScore = 0
+    computerScore = 0
+
+    const body = document.querySelector('body')
+
+    const rock = document.createElement('button')
+    const paper = document.createElement('button')
+    const scissors = document.createElement('button')
+    const player = document.createElement('h2')
+    const computer = document.createElement('h2')
+
+    rock.id = 'Rock'
+    rock.textContent = rock.id
+    paper.id = 'Paper'
+    paper.textContent = paper.id
+    scissors.id = 'Scissors'
+    scissors.textContent = scissors.id
+    player.textContent = `Your score is: ${playerScore}`
+    computer.textContent = `The comptuer's score is: ${computerScore}`
+
+    body.append(rock)
+    body.append(paper)
+    body.append(scissors)
+    body.append(player)
+    body.append(computer)
+
+
+    const div = document.createElement('div')
+    const div_player = document.createElement('p')
+    const div_computer = document.createElement('p')
+    const div_result = document.createElement('p')
+
+    div.append(div_player)
+    div.append(div_computer)
+    div.append(div_result)
+    body.append(div)
+
+    const buttons = document.querySelectorAll('button');
+
+    buttons.forEach((button) => {
+        button.addEventListener('click', () => {
+        //const body = document.querySelector('body')
+        computerMove = computerPlay()
+
+        div_player.textContent = `You chose ${button.id}!`
+        div_computer.textContent = `The computer chose ${computerMove}!`
+        div_result.textContent = round(button.id, computerMove)  
+        
+        
+        player.textContent = `Your score is: ${playerScore}`
+        computer.textContent = `The comptuer's score is: ${computerScore}`
+
+        })
+})
+}
+
+
 function computerPlay()//returns rock, paper, or scissors  
     {
         let choices = ['Rock', 'Paper', 'Scissors']
         return choices[Math.floor(Math.random() * 3)] 
     }
 
-function capitalize(word) {//takes a string and makes the first letter capital, and everything else lowercase
-        return (
-          word.substr(0, 1).toUpperCase() + word.substr(1, word.length - 1).toLowerCase()
-        )
-        }
 
 function round(playerSelection, computerSelection = computerPlay()) { //plays a singly round
     let win = 0; //0 = lose, 1 = win, 2 = draw
-    //playerSelection = capitalize(playerSelection); //this is now useless because I do it in game
     if (playerSelection === computerSelection){
         win = 2;
     }
@@ -29,47 +95,17 @@ function round(playerSelection, computerSelection = computerPlay()) { //plays a 
         win = 1;
     }
     else 
-        return `Error, invalid answer: You wrote ${playerSelection}, the computer wrote ${computerSelection}`
+        return `Error, invalid answer: You wrote ${playerSelection}, the computer wrote ${computerSelection}`//no longer occurs because there is no user input anymore
     switch (win) {
         case 0:
+            incrementComputerScore()
             return `You Lost! ${computerSelection} beats ${playerSelection}!`
         case 1: 
+            incrementPlayerScore()
             return `You Won! ${playerSelection} beats ${computerSelection}!`
         case 2:
             return `Draw! ${computerSelection} ties with ${playerSelection}!`
         }
     }
 
-function game() {//plays five rounds
-  console.log('Welcome to Rock Paper Scissors! You will play 5 rounds with the computer, good luck!')
-  let playerSelection = ''
-  let playerScore = 0
-  let computerScore = 0
-  let roundResult = ''
-  for(let i = 0; i < 5; i++){
-      playerSelection = capitalize(prompt('What do you choose? (Rock, Paper, or Scissors): '))
-      //while(playerSelection !== 'Rock' || playerSelection !== 'Paper' || playerSelection !== 'Scissors') //prompt doesn't wait for a response so this turned into an infinite loop
-           // console.log('Please enter a valid value!')
-           // playerSelection = capitalize(prompt('What do you choose? (Rock, Paper, or Scissors): '))
-      roundResult = round(playerSelection)
-      console.log(roundResult)
-      if(roundResult.substr(0, 5) == 'You W')
-        playerScore++;
-      else if(roundResult.substr(0, 5) == 'You L')
-        computerScore++;
-      console.log(`The current score is: ${playerScore} player : ${computerScore} computer `)
-  }
-  switch (true) {
-    case playerScore === computerScore:
-          console.log("It's a draw!")
-          break;
-    case playerScore > computerScore:
-          console.log("You Win!")
-          break;     
-    case playerScore < computerScore:
-          console.log("You Lose!")
-          break;
-  }
-}
 
-game()
